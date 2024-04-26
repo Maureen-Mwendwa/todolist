@@ -19,7 +19,8 @@ class TasksScreen extends StatefulWidget {
 class _TasksScreenState extends State<TasksScreen> {
   List<ToDo> todosList = ToDo.todoList(); // List of all tasks
   List<ToDo> _foundToDo = []; // List of tasks to display based on category
-  TaskCategory _selectedCategory = TaskCategory.all; // Default selected category
+  TaskCategory _selectedCategory =
+      TaskCategory.all; // Default selected category
 
   @override
   void initState() {
@@ -35,10 +36,14 @@ class _TasksScreenState extends State<TasksScreen> {
           _foundToDo = todosList; // Display all tasks
           break;
         case TaskCategory.completed:
-          _foundToDo = todosList.where((todo) => todo.isDone).toList(); // Display completed tasks
+          _foundToDo = todosList
+              .where((todo) => todo.isDone)
+              .toList(); // Display completed tasks
           break;
         case TaskCategory.pending:
-          _foundToDo = todosList.where((todo) => !todo.isDone).toList(); // Display pending tasks
+          _foundToDo = todosList
+              .where((todo) => !todo.isDone)
+              .toList(); // Display pending tasks
           break;
       }
     });
@@ -169,7 +174,8 @@ class _TasksScreenState extends State<TasksScreen> {
             ListTile(
               title: Text("Completed Tasks"),
               leading: Icon(Icons.check_box),
-              onTap: () => _setSelectedCategory(TaskCategory.completed, context),
+              onTap: () =>
+                  _setSelectedCategory(TaskCategory.completed, context),
             ),
             ListTile(
               title: Text("Pending Tasks"),
@@ -177,9 +183,13 @@ class _TasksScreenState extends State<TasksScreen> {
               onTap: () => _setSelectedCategory(TaskCategory.pending, context),
             ),
             ListTile(
-              title: Text("Help"),
-              leading: Icon(Icons.help_center),
-            ),
+                title: Text("Help"),
+                leading: Icon(Icons.help_center),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context,
+                      '/helppage'); //enable one to navigate to the helppage
+                }),
             ListTile(
               title: Text("Logout"),
               leading: Icon(Icons.logout),
