@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/model/todo.dart'; // Import ToDo model class
 import 'package:todolist/widgets/todo_items.dart'; // Import ToDoItem widget
+import 'package:badges/badges.dart' as badges;
 
 // Enumeration to represent different task categories
 enum TaskCategory {
@@ -22,9 +23,15 @@ class _TasksScreenState extends State<TasksScreen> {
   TaskCategory _selectedCategory =
       TaskCategory.all; // Default selected category
 
+  //Adding state variables to store task counts
+  int countAll = 0;
+  int countCompleted = 0;
+  int countPending = 0;
+
   @override
   void initState() {
     _updateTasks(); // Initialize tasks based on selected category
+    _calculateTaskCounts(); // Call the _calculateTaskCounts method
     super.initState();
   }
 
@@ -49,11 +56,24 @@ class _TasksScreenState extends State<TasksScreen> {
     });
   }
 
+  void _calculateTaskCounts() {
+    int countAll = todosList.length;
+    int countCompleted = todosList.where((todo) => todo.isDone).toList().length;
+    int countPending = todosList.where((todo) => !todo.isDone).toList().length;
+
+    setState(() {
+      this.countAll = countAll;
+      this.countCompleted = countCompleted;
+      this.countPending = countPending;
+    });
+  }
+
   // Method to handle task completion status change
   void _handleToDoChange(ToDo todo) {
     setState(() {
       todo.isDone = !todo.isDone; // Toggle completion status
       _updateTasks(); // Update displayed tasks after status change
+      _calculateTaskCounts();
     });
   }
 
@@ -62,6 +82,7 @@ class _TasksScreenState extends State<TasksScreen> {
     setState(() {
       todosList.removeWhere((item) => item.id == id); // Remove task from list
       _updateTasks(); // Update displayed tasks after deletion
+      _calculateTaskCounts();
     });
   }
 
@@ -119,6 +140,7 @@ class _TasksScreenState extends State<TasksScreen> {
       setState(() {
         todosList.add(newTask);
         _updateTasks(); // Update the displayed tasks list
+        _calculateTaskCounts();
       });
     }
   }
@@ -128,6 +150,7 @@ class _TasksScreenState extends State<TasksScreen> {
     setState(() {
       _selectedCategory = category; // Update selected category
       _updateTasks(); // Update displayed tasks based on new category
+      _calculateTaskCounts();
     });
 
     // Close the drawer and navigate to the tasks screen
@@ -168,19 +191,66 @@ class _TasksScreenState extends State<TasksScreen> {
             // Drawer menu items for different task categories
             ListTile(
               title: Text("All Tasks"),
-              leading: Icon(Icons.menu_outlined),
+              leading: badges.Badge(
+                  badgeContent: Text('$countAll'),
+                  showBadge: true,
+                  badgeAnimation: badges.BadgeAnimation.rotation(
+                      animationDuration: Duration(seconds: 1),
+                      colorChangeAnimationDuration: Duration(seconds: 1),
+                      loopAnimation: false,
+                      curve: Curves.fastOutSlowIn,
+                      colorChangeAnimationCurve: Curves.easeInCubic),
+                  badgeStyle: badges.BadgeStyle(
+                      shape: badges.BadgeShape.circle,
+                      badgeColor: Colors.blue,
+                      padding: EdgeInsets.all(5),
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: Colors.white, width: 2)),
+                  child: Icon(Icons.menu_outlined)),
               onTap: () => _setSelectedCategory(TaskCategory.all, context),
             ),
             ListTile(
               title: Text("Completed Tasks"),
-              leading: Icon(Icons.check_box),
+              leading: badges.Badge(
+                  badgeContent: Text('$countCompleted'),
+                  showBadge: true,
+                  badgeAnimation: badges.BadgeAnimation.rotation(
+                      animationDuration: Duration(seconds: 1),
+                      colorChangeAnimationDuration: Duration(seconds: 1),
+                      loopAnimation: false,
+                      curve: Curves.fastOutSlowIn,
+                      colorChangeAnimationCurve: Curves.easeInCubic),
+                  badgeStyle: badges.BadgeStyle(
+                      shape: badges.BadgeShape.circle,
+                      badgeColor: Colors.green,
+                      padding: EdgeInsets.all(5),
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: Colors.white, width: 2)),
+                  child: Icon(Icons.check_box)),
               onTap: () =>
                   _setSelectedCategory(TaskCategory.completed, context),
             ),
             ListTile(
               title: Text("Pending Tasks"),
-              leading: Icon(Icons.incomplete_circle),
-              onTap: () => _setSelectedCategory(TaskCategory.pending, context),
+              leading: badges.Badge(
+                badgeContent: Text('$countPending'),
+                showBadge: true,
+                badgeAnimation: badges.BadgeAnimation.rotation(
+                    animationDuration: Duration(seconds: 1),
+                    colorChangeAnimationDuration: Duration(seconds: 1),
+                    loopAnimation: false,
+                    curve: Curves.fastOutSlowIn,
+                    colorChangeAnimationCurve: Curves.easeInCubic),
+                badgeStyle: badges.BadgeStyle(
+                    shape: badges.BadgeShape.circle,
+                    badgeColor: Colors.red,
+                    padding: EdgeInsets.all(5),
+                    borderRadius: BorderRadius.circular(4),
+                    borderSide: BorderSide(color: Colors.white, width: 2)),
+                child: Icon(Icons.incomplete_circle),
+                onTap: () =>
+                    _setSelectedCategory(TaskCategory.pending, context),
+              ),
             ),
             ListTile(
                 title: Text("Help"),
