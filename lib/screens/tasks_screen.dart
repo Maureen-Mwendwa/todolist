@@ -185,6 +185,19 @@ class _TasksScreenState extends State<TasksScreen> {
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage("assets/profile.jpeg"),
               ),
+              otherAccountsPictures: [
+                Center(
+                  child: Icon(Icons.emoji_people_outlined,
+                      color: Colors.pink, size: 30.0),
+                ),
+                Center(
+                  child: Text('Welcome!',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              ],
               accountName: Text("Student"),
               accountEmail: Text("student@gmail.com"),
             ),
