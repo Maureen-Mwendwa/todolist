@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:math'; //package for generating random numbers.
 
 //enum to represent randomTasks
 enum Tasks {
@@ -36,20 +36,18 @@ class _HelpPageState extends State<HelpPage> {
   late String randomTask = Tasks.bookreading
       .toString()
       .split('.')
-      .last; //We declare the randomTask variable at the class level because we want it to be accessible across different methods within the _HelpPageState class.The late keyword is used here because randomTask is initialized after the class is instantiated. By marking it as late, we're telling Dart that the variable will be assigned a value before it's used.
-  //late String randomTask;
+      .last; //We declare the randomTask variable at the class level because we want it to be accessible across different methods within the _HelpPageState class and also to store the randomly generated task.The late keyword is used here because randomTask is initialized after the class is instantiated. By marking it as late, we're telling Dart that the variable will be assigned a value before it's used.
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   randomTask = generateRandomTask();
-  // }
-
+//Method to generate a random task from the Tasks enum
   String generateRandomTask() {
-    final random = Random();
-    final List<Tasks> values = Tasks.values;
-    final randomTask = values[random.nextInt(values.length)];
-    return randomTask.toString().split('.').last;
+    final random = Random(); //creating a new Random object
+    final List<Tasks> values = Tasks.values; //Getting a list of all enum values
+    final randomTask =
+        values[random.nextInt(values.length)]; //Picking a random value
+    return randomTask
+        .toString()
+        .split('.')
+        .last; //Return the task name as a String and initialize with the first task. Remember printing the enums we get the output as Tasks.bookreading hence we want the last part bookreading.
   }
 
   @override
@@ -81,7 +79,7 @@ class _HelpPageState extends State<HelpPage> {
             child: IconButton(
                 icon: Icon(Icons.arrow_circle_left_rounded),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context); //Navigate back when pressed
                 }),
           ),
           backgroundColor: Color.fromARGB(255, 136, 48, 7),
@@ -96,7 +94,7 @@ class _HelpPageState extends State<HelpPage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                child: Text(randomTask,
+                child: Text(randomTask, //Display the current random task
                     style: TextStyle(
                         fontSize: 50.0,
                         fontWeight: FontWeight.bold,
@@ -109,7 +107,7 @@ class _HelpPageState extends State<HelpPage> {
             ),
             ElevatedButton(
               onPressed: () => setState(() {
-                randomTask = generateRandomTask();
+                randomTask = generateRandomTask(); //Generate a new random task
               }),
               child: Text('Next'),
             )
