@@ -36,3 +36,9 @@ Screens are responsible for rendering the user interface of different parts of t
 widgets
 Widgets are reusable components that encapsulate UI elements and behavior, making it easier to build and maintain the app's interface.
 
+**Recent Updates**
+1. Added functionality to display and generate random tasks in the **HelpPage** to provide user suggestions.
+2. Added badges to drawer menu icons for task categories to show notification counts information.
+3. Displayed welcome message on the user profile.
+4. Modified the ToDo model class and the user interface components to implement due date functionality for tasks.
+
