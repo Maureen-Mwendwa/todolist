@@ -23,6 +23,9 @@ class _TasksScreenState extends State<TasksScreen> {
   TaskCategory _selectedCategory =
       TaskCategory.all; // Default selected category
 
+  //Add date variable
+  DateTime? selectedDate = DateTime.now();
+
   //Adding state variables to store task counts
   int countAll = 0;
   int countCompleted = 0;
@@ -68,11 +71,19 @@ class _TasksScreenState extends State<TasksScreen> {
     });
   }
 
-  // Method to handle task completion status change
-  void _handleToDoChange(ToDo todo) {
+//Method to handle task completion status change
+  void _handleToDoChange(ToDo updatedTodo) {
     setState(() {
-      todo.isDone = !todo.isDone; // Toggle completion status
-      _updateTasks(); // Update displayed tasks after status change
+      // Find the index of the original ToDo item in the list
+      int index = todosList.indexWhere((todo) => todo.id == updatedTodo.id);
+      updatedTodo.isDone = !updatedTodo.isDone; // Toggle completion status
+
+      // Replace the original ToDo item with the updated one
+      if (index != -1) {
+        todosList[index] = updatedTodo;
+      }
+
+      _updateTasks();
       _calculateTaskCounts();
     });
   }
@@ -84,6 +95,21 @@ class _TasksScreenState extends State<TasksScreen> {
       _updateTasks(); // Update displayed tasks after deletion
       _calculateTaskCounts();
     });
+  }
+
+  //Method to add date
+  void _selectDate(BuildContext context, String id) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2050),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
   }
 
   // Method to show dialog for adding a new task
